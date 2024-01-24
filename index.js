@@ -1,19 +1,12 @@
-const express = require('express');
-const app = express();
+// index.js
+const http = require('http');
 
-app.use((req, res, next) => {
-  const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  console.log('IP do Cliente:', clientIP);
-  // Aqui você poderia tomar decisões com base no IP ou armazená-lo de acordo com as leis de privacidade aplicáveis.
-
-  next();
-});
-
-app.get('/', (req, res) => {
-  res.send('Olá, mundo!');
+const server = http.createServer((req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello, Vercel!\n');
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
