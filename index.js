@@ -1,20 +1,19 @@
-// Import the `req` object from the `@vercel/node` package.
-const { req } = require("@vercel/node");
+const express = require('express');
+const app = express();
 
-// Get the client's IP address.
-const ipAddress = req.headers.get("X-Forwarded-For");
+app.use((req, res, next) => {
+  const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log('IP do Cliente:', clientIP);
+  // Aqui você poderia tomar decisões com base no IP ou armazená-lo de acordo com as leis de privacidade aplicáveis.
 
-// Create a JSON object to store the IP address.
-const ipAddressObject = {
-  ipAddress: ipAddress,
-};
+  next();
+});
 
-// Save the JSON object to a file.
-const fs = require("fs");
-fs.writeFile("ip-addresses.json", JSON.stringify(ipAddressObject), (err) => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log("IP address saved to file successfully.");
-  }
+app.get('/', (req, res) => {
+  res.send('Olá, mundo!');
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
 });
